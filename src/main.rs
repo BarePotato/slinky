@@ -1,10 +1,6 @@
-// this is a single linked list
-// ignore the double parts, they are incomplete and wrong
-// implement this in a new project with Option<Rc<RefCell<Noodle<T>>>>
 #[derive(Debug)]
 struct Noodle<T> {
     next: Nood<T>,
-    // prev: Nood<T>,
     doot: T
 }
 
@@ -13,7 +9,6 @@ type Nood<T> = Option<Box<Noodle<T>>>;
 #[derive(Debug)]
 struct DustyPawsie<T> {
     head: Nood<T>,
-    // tail: Nood<T>,
 }
 
 impl<T> DustyPawsie<T> {
@@ -30,29 +25,12 @@ impl<T> DustyPawsie<T> {
         self.head = Some(Box::new(head));
     }
 
-    // fn poosh_tail(&mut self, doot: T) {
-    //     let tail = Noodle {
-    //         next: None,
-    //         prev: self.tail.take(),
-    //         doot
-    //     };
-
-    //     self.tail = Some(Box::new(tail))
-    // }
-
    fn pluck(&mut self) -> Option<T>  {
         self.head.take().map(|nood| {
             self.head = nood.next;
             nood.doot
         })
     }
-
-   // fn pluck_tail(&mut self) -> Option<T> {
-   //     self.tail.take().map(|nood| {
-   //         self.tail = nood.prev;
-   //         nood.doot
-   //     })
-   // }
 
    fn ser(&self) -> Option<&T> {
        self.head.as_ref().map(|nood| &nood.doot)
