@@ -1,7 +1,7 @@
 #[derive(Debug)]
 struct Noodle<T> {
     next: Nood<T>,
-    doot: T
+    doot: T,
 }
 
 type Nood<T> = Option<Box<Noodle<T>>>;
@@ -12,35 +12,24 @@ struct DustyPawsie<T> {
 }
 
 impl<T> DustyPawsie<T> {
-    fn new() -> Self {
-        Self { head: None }
-    }
+    fn new() -> Self { Self { head: None } }
 
     fn poosh(&mut self, doot: T) {
-        let head = Noodle {
-            next:  self.head.take(),
-            doot
-        };
+        let head = Noodle { next: self.head.take(), doot };
 
         self.head = Some(Box::new(head));
     }
 
-   fn pluck(&mut self) -> Option<T>  {
+    fn pluck(&mut self) -> Option<T> {
         self.head.take().map(|nood| {
             self.head = nood.next;
             nood.doot
         })
     }
 
-   fn ser(&self) -> Option<&T> {
-       self.head.as_ref().map(|nood| &nood.doot)
-   }
+    fn ser(&self) -> Option<&T> { self.head.as_ref().map(|nood| &nood.doot) }
 
-   fn iter(&self) -> Iter<'_, T> {
-       Iter {
-           next: self.head.as_ref()
-       }
-   }
+    fn iter(&self) -> Iter<'_, T> { Iter { next: self.head.as_ref() } }
 }
 
 impl<T> Drop for DustyPawsie<T> {
@@ -54,7 +43,7 @@ impl<T> Drop for DustyPawsie<T> {
 }
 
 struct Iter<'a, T> {
-    next: Option<&'a Box<Noodle<T>>>
+    next: Option<&'a Box<Noodle<T>>>,
 }
 
 impl<'a, T> Iterator for Iter<'a, T> {
@@ -76,18 +65,21 @@ fn main() {
     println!("{:?}\n", slink);
 
     println!("{:?}", slink.pluck());
-    println!("{:?}\n", slink);
 
     println!("{:?}\n", slink.ser());
 
+    println!("{:?}", slink.ser());
+
     slink.poosh(42);
     slink.poosh(84);
+    slink.poosh(42);
     let mut slink_iter = slink.iter();
-    while let Some(noodle) = slink_iter.next(){
+    while let Some(noodle) = slink_iter.next() {
         println!("{:?}", noodle);
     }
+
+    let dood = slink.iter();
 
     println!("\n{:?}", slink);
     drop(slink);
 }
-
